@@ -143,10 +143,49 @@ public class Juego
      */
     private void jugar()
     {
-
-        
+        repartir();
+        for (int j = 0; j < 5; j++){
+            System.out.println("########################################");
+            System.out.println("Cartas de :" + jugadores[0].getNombre());
+            jugadores[0].verCartasJugador();
+            Baza bazaActual = new Baza(jugadores.length, this.paloQuePinta);
+            System.out.println("########################################");
+            System.out.println(jugadores[0].getNombre() + " tira una carta");
+            Scanner sc = new Scanner(System.in);
+            String nombreCarta = sc.nextLine();
+            Carta cartaTirada = jugadores[0].tirarCarta(nombreCarta);
+            while (cartaTirada == null){
+                System.out.println("Esa carta no la tienes");
+                System.out.println(jugadores[0].getNombre() + " tira una carta");
+                sc = new Scanner(System.in);
+                nombreCarta = sc.nextLine();
+                cartaTirada = jugadores[0].tirarCarta(nombreCarta);
+            }
+            bazaActual.addCarta(cartaTirada, jugadores[0].getNombre());
+            for (int i = 1; i < jugadores.length; i++){
+                Carta cartaAleatoria = jugadores[i].tirarCartaAleatoria();
+                bazaActual.addCarta(cartaAleatoria, jugadores[i].getNombre());
+            }
+            jugadores[encontrarPosicionJugadorPorNombre(bazaActual.nombreJugadorQueVaGanandoLaBaza())].addBaza(bazaActual);
+            System.out.println(bazaActual.nombreJugadorQueVaGanandoLaBaza()+ " ha ganando la baza");
+        }
+        System.out.println(jugadores[0].getNombre() + " ha ganado " + jugadores[0].getNumeroBazasGanadas() + " bazas.");
+        if (jugadores[0].getNumeroBazasGanadas() > 2){
+            System.out.println(jugadores[0].getNombre() + " no es julepe");
+        }
+        else{
+            System.out.println(jugadores[0].getNombre() + " es julepe");
+        }
     }    
 }
+
+
+
+
+
+
+
+
 
 
 
