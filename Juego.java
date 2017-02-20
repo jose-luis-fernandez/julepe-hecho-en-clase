@@ -11,7 +11,7 @@ public class Juego
 {
     private Jugador[] jugadores;
     private Mazo mazo;
-    private int paloQuePinta;
+    private Palo paloQuePinta;
 
 
     /**
@@ -66,7 +66,7 @@ public class Juego
      *
      * @return El palo que pinta tras repartir
      */
-    private int repartir() 
+    private Palo repartir() 
     {
         mazo.barajar();
 
@@ -80,16 +80,16 @@ public class Juego
 
         paloQuePinta = nuevaCarta.getPalo();
         switch (paloQuePinta) {
-            case 0:
+            case OROS:
             System.out.println("Pintan oros");
             break;
-            case 1:
+            case COPAS:
             System.out.println("Pintan copas");
             break;
-            case 2:
+            case ESPADAS:
             System.out.println("Pintan espadas");
             break;
-            case 3:
+            case BASTOS:
             System.out.println("Pintan bastos");
             break;
         }
@@ -108,7 +108,7 @@ public class Juego
      */
     private int encontrarPosicionJugadorPorNombre(String nombre)
     {
-        int posicionJugador = 0;
+        int posicionJugador = -1;
         for (int i = 0; i < jugadores.length; i++){
             if (jugadores[i].getNombre().equals(nombre)){
                 posicionJugador = i;
@@ -166,7 +166,8 @@ public class Juego
                 Carta cartaAleatoria = jugadores[i].tirarCartaAleatoria();
                 bazaActual.addCarta(cartaAleatoria, jugadores[i].getNombre());
             }
-            jugadores[encontrarPosicionJugadorPorNombre(bazaActual.nombreJugadorQueVaGanandoLaBaza())].addBaza(bazaActual);
+            String nombreGanador = bazaActual.nombreJugadorQueVaGanandoLaBaza();
+            jugadores[encontrarPosicionJugadorPorNombre(nombreGanador)].addBaza(bazaActual);
             System.out.println(bazaActual.nombreJugadorQueVaGanandoLaBaza()+ " ha ganando la baza");
         }
         System.out.println(jugadores[0].getNombre() + " ha ganado " + jugadores[0].getNumeroBazasGanadas() + " bazas.");
