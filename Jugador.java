@@ -114,38 +114,58 @@ public class Jugador
     /**
      * MÃ©todo que tira una carta "inteligentemente"
      */
-    public Carta tirarCartaInteligentemente(int paloPrimeraCartaDeLaBaza, 
+    public Carta tirarCartaInteligentemente(Palo paloPrimeraCartaDeLaBaza, 
     Carta cartaQueVaGanando,
-    int paloQuePinta)
+    Palo paloQuePinta)
     {
-         Carta cartaATirar = null;
-//         boolean cartasJugadorPaloQuePinta = false;
-//         Carta peorCartaQuePintaEnlaMano = null;
-//         Carta mejorCartaQuePintaEnlaMano = null;
-//         for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
-//             if (cartasQueTieneEnLaMano[i].getPalo() == paloQuePinta){
-//                 cartaATirar = cartasQueTieneEnLaMano[i];
-//                 cartasJugadorPaloQuePinta = true;
-//                 mejorCartaQuePintaEnlaMano = cartasQueTieneEnLaMano[i];
-//                 peorCartaQuePintaEnlaMano = cartasQueTieneEnLaMano[i];
-//                 if (cartasQueTieneEnLaMano[i].getPalo() == paloQuePinta && 
-//                 cartaJugadorPaloQuePinta != null && cartasQueTieneEnLaMano[i].ganaA(cartaQueVaGanando, paloQuePinta)){
-//                     cartaATirar = cartasQueTieneEnLaMano[i];
-//                     mejorCartaQuePintaEnlaMano = cartasQueTieneEnLaMano[i];
-//                     if (!cartasQueTieneEnLaMano[i].ganaA(peorCartaQuePintaEnlaMano, paloQuePinta)){
-//                         peorCartaQuePintaEnlaMano = cartasQueTieneEnLaMano[i];
-//                     }
-//                 }
-//             }
-//         }
-//         
-//         if (cartaQueVaGanando.getPalo() == paloQuePinta){
-//             if (cartasJugadorPaloQuePinta == true){
-//             
-//             }
-//         }
-// 
-         return cartaATirar;
+        /**
+         * Método que hará que un jugador tire una carta intentando ganar la baza,
+         * en caso de que no pueda ganar intentará asistir y si no puede ni ganar ni
+         * asistir tirará la peor carta en su mano.
+         */
+        
+        Carta cartaATirar = null; // Variable local tipo Carta que almacenará la carta que tirará el jugador
+        /**
+         * Bucle que recorre las cartas que tiene el jugador en la mano
+         * y si alguna puede ganar a la carta que va ganando la baza tirará la última que encuentre.
+         */
+        Carta peorCarta = null;
+        for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
+            if (cartasQueTieneEnLaMano[i].ganaA(cartaQueVaGanando, paloQuePinta)){
+                cartaATirar = cartasQueTieneEnLaMano[i];
+            }
+        }
+        
+        if (cartaATirar == null){
+            /**
+             * Bucle que, en el caso de que no se pueda tirar ninguna carta que gane,
+             * buscará una carta que pueda asistir a la primera carta de la baza.
+             */
+            for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
+                if (cartasQueTieneEnLaMano[i].getPalo() == paloPrimeraCartaDeLaBaza){
+                    cartaATirar = cartasQueTieneEnLaMano[i];
+                }
+            }
+        }
+        
+        if (cartaATirar == null){
+            /**
+             * Bucle que, en el caso de que no se pueda tirar ninguna carta que gane ni asistir
+             * a la primera carta de la baza buscrá la peor carta en la mano.
+             */
+            for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
+                if(i == 0){
+                    peorCarta = cartasQueTieneEnLaMano[i];
+                }
+                
+                if (i < 0 && peorCarta.ganaA(cartasQueTieneEnLaMano[i], paloQuePinta)){
+                    peorCarta = cartasQueTieneEnLaMano[i];
+                }
+                cartaATirar = peorCarta;
+            }
+        }
+        System.out.println(nombre + " ha tirado " + cartaATirar);
+        return cartaATirar;
     }
 
     /**
@@ -166,9 +186,6 @@ public class Jugador
     }
 
 }
-
-
-
 
 
 

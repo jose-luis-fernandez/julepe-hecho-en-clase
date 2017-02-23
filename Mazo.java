@@ -17,12 +17,10 @@ public class Mazo
     public Mazo()
     {
         mazo = new ArrayList<Carta>();
-        Palo palo = null;
         for (Palo paloActual : Palo.values()){
-            palo = paloActual;
             for (int valorActual = 1; valorActual <= 12; valorActual++) {
                 if (valorActual != 8 && valorActual != 9) {
-                    mazo.add(new Carta(valorActual, palo));
+                    mazo.add(new Carta(valorActual, paloActual));
                 }
             } 
         }       
