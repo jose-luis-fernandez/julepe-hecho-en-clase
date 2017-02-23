@@ -125,40 +125,55 @@ public class Jugador
          */
         
         Carta cartaATirar = null; // Variable local tipo Carta que almacenará la carta que tirará el jugador
-        /**
-         * Bucle que recorre las cartas que tiene el jugador en la mano
-         * y si alguna puede ganar a la carta que va ganando la baza tirará la última que encuentre.
-         */
-        Carta peorCarta = null;
-        for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
-            if (cartasQueTieneEnLaMano[i].ganaA(cartaQueVaGanando, paloQuePinta)){
-                cartaATirar = cartasQueTieneEnLaMano[i];
-            }
-        }
+        Carta peorCarta = null; // Variable local tipo Carta que almacenará la peor carta en la mano.
+        Carta mejorCartaParaAsistir = null; // Variable local tipo Carta que almacenará la mejor carta con la que asistir.
+        Carta mejorCartatriunfo = null; // Variable local tipo Carta que almacenará la mejor carta triunfo.
         
         if (cartaATirar == null){
             /**
-             * Bucle que, en el caso de que no se pueda tirar ninguna carta que gane,
-             * buscará una carta que pueda asistir a la primera carta de la baza.
+             * Bucle que busca la mejor carta para asistir y la tira.
              */
+            
             for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
-                if (cartasQueTieneEnLaMano[i].getPalo() == paloPrimeraCartaDeLaBaza){
-                    cartaATirar = cartasQueTieneEnLaMano[i];
+                if (cartasQueTieneEnLaMano[i].getPalo() == paloPrimeraCartaDeLaBaza && i == 0){
+                    mejorCartaParaAsistir = cartasQueTieneEnLaMano[i];
+                }
+                
+                if (i > 0 && mejorCartaParaAsistir != null && mejorCartaParaAsistir.ganaA(cartasQueTieneEnLaMano[i], paloQuePinta) == false){
+                    mejorCartaParaAsistir = cartasQueTieneEnLaMano[i];
                 }
             }
+            cartaATirar = mejorCartaParaAsistir;
         }
         
         if (cartaATirar == null){
             /**
-             * Bucle que, en el caso de que no se pueda tirar ninguna carta que gane ni asistir
-             * a la primera carta de la baza buscrá la peor carta en la mano.
+             * Bucle que, en el caso de que no se pueda tirar ninguna carta que asista
+             * buscará el mejor triunfo y lo tirará.
+             */
+            for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
+                if (cartasQueTieneEnLaMano[i].getPalo() == paloQuePinta && i == 0){
+                    mejorCartatriunfo = cartasQueTieneEnLaMano[i];
+                }
+                
+                if (i > 0 && mejorCartatriunfo != null && mejorCartatriunfo.ganaA(cartasQueTieneEnLaMano[i], paloQuePinta) == false){
+                    mejorCartatriunfo = cartasQueTieneEnLaMano[i];
+                }
+                cartaATirar = mejorCartatriunfo;
+            }
+        }
+        
+        if (cartaATirar == null){
+            /**
+             * Bucle que, en el caso de que no pueda asistir ni tirar triunfo
+             * buscará la peor carta en la mano y la tira.
              */
             for (int i = 0; i < cartasQueTieneEnLaMano.length; i++){
                 if(i == 0){
                     peorCarta = cartasQueTieneEnLaMano[i];
                 }
                 
-                if (i < 0 && peorCarta.ganaA(cartasQueTieneEnLaMano[i], paloQuePinta)){
+                if (i > 0 && peorCarta.ganaA(cartasQueTieneEnLaMano[i], paloQuePinta)){
                     peorCarta = cartasQueTieneEnLaMano[i];
                 }
                 cartaATirar = peorCarta;
